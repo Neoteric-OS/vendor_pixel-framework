@@ -85,6 +85,7 @@ import com.google.android.systemui.NotificationLockscreenUserManagerGoogle;
 import com.google.android.systemui.assist.AssistManagerGoogle;
 import com.google.android.systemui.assist.dagger.AssistModule;
 import com.google.android.systemui.columbus.dagger.ColumbusModule;
+import com.android.systemui.statusbar.connectivity.BluetoothModule;
 import com.google.android.systemui.controls.GoogleControlsTileResourceConfigurationImpl;
 import com.google.android.systemui.dreamliner.DockObserver;
 import com.google.android.systemui.dreamliner.dagger.DreamlinerModule;
@@ -125,7 +126,8 @@ import dagger.Lazy;
         ColumbusModule.class,
         StatusBarEventsModule.class,
         SystemUIGooglePolicyModule.class,
-        RotationLockModule.class
+        RotationLockModule.class,
+        BluetoothModule.class
 })
 public abstract class SystemUIGoogleModule {
 
