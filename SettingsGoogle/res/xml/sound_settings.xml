@@ -11,7 +11,8 @@
         android:order="-185"
         android:title=""
         settings:allowDividerBelow="true"
-        settings:controller="com.android.settings.notification.RemoteVolumeGroupController" />
+        settings:controller="com.android.settings.notification.RemoteVolumeGroupController">
+    </PreferenceCategory>
 
     <com.android.settings.notification.VolumeSeekBarPreference
         android:icon="@drawable/ic_media_stream"
@@ -43,7 +44,7 @@
         settings:searchable="false" />
 
     <com.android.settings.notification.VolumeSeekBarPreference
-        android:icon="@drawable/ic_notifications"
+        android:icon="@drawable/ic_volume_ringer"
         android:key="ring_volume"
         android:order="-160"
         android:title="@string/ring_volume_option_title"
@@ -62,7 +63,8 @@
         android:key="notification_volume"
         android:order="-150"
         android:title="@string/notification_volume_option_title"
-        settings:controller="com.android.settings.notification.NotificationVolumePreferenceController" />
+        settings:controller="com.android.settings.notification.NotificationVolumePreferenceController"
+        settings:unavailableSliceSubtitle="@string/notification_volume_disabled_summary"/>
 
     <com.android.settings.notification.VolumeSeekBarPreference
         android:icon="@*android:drawable/ic_audio_alarm"
@@ -71,6 +73,15 @@
         android:title="@string/alarm_volume_option_title"
         settings:controller="com.android.settings.notification.AlarmVolumePreferenceController" />
 
+    <!-- Link ringtone and notification volumes -->
+    <org.neoteric.support.preference.SwitchPreference
+        android:key="volume_link_notification"
+        android:title="@string/volume_link_notification_title"
+        android:order="-138"
+        settings:controller="com.android.settings.notification.LinkedVolumesPreferenceController"/>
+
+    <!-- TODO(b/174964721): make this a PrimarySwitchPreference -->
+    <!-- Interruptions -->
     <com.android.settingslib.RestrictedPreference
         android:fragment="com.android.settings.notification.zen.ZenModeSettings"
         android:key="zen_mode"
@@ -80,25 +91,22 @@
         settings:keywords="@string/keywords_sounds_and_notifications_interruptions"
         settings:useAdminDisabledSummary="true" />
 
+    <!-- Phone ringtone -->
     <com.android.settings.DefaultRingtonePreference
-        android:dialogTitle="@string/ringtone_title"
         android:key="phone_ringtone"
-        android:order="-120"
-        android:ringtoneType="ringtone"
-        android:summary="@string/summary_placeholder"
-        android:title="@string/ringtone_title"
-        settings:keywords="@string/sound_settings" />
-
-    <!-- Phone ringtone for Slot2 -->
-    <com.android.settings.DefaultRingtonePreference
-        android:key="ringtone2"
         android:title="@string/ringtone_title"
         android:dialogTitle="@string/ringtone_title"
         android:summary="@string/summary_placeholder"
         android:ringtoneType="ringtone"
-        settings:allowDividerAbove="false"
-        android:order="-119"/>
+        android:order="-120"
+        settings:keywords="@string/sound_settings"/>
 
+    <Preference
+        android:key="sound_adaptive_playback_summary"
+        android:title="@string/adaptive_playback_screen_title"
+        android:fragment="com.android.settings.sound.AdaptivePlaybackSoundSettings"
+        android:order="-103"
+        settings:controller="com.android.settings.sound.AdaptivePlaybackParentPreferenceController" />
     <Preference
         android:fragment="com.android.settings.notification.SpatialAudioSettings"
         android:key="spatial_audio_summary"
@@ -154,35 +162,54 @@
         android:title="@string/clear_calling_title"
         settings:controller="com.google.android.settings.notification.ClearCallingPreferenceController" />
 
-    <SwitchPreference
+    <org.neoteric.support.preference.SystemSettingSwitchPreference
+        android:key="show_app_volume"
+        android:title="@string/app_volume_title"
+        android:summary="@string/app_volume_summary"
+        android:defaultValue="false"
+        android:order="-5"/>
+
+    <!-- Dial pad tones -->
+    <org.neoteric.support.preference.SwitchPreference
         android:key="dial_pad_tones"
         android:order="-50"
         android:title="@string/dial_pad_tones_title" />
 
-    <SwitchPreference
+    <org.neoteric.support.preference.SwitchPreference
         android:key="screen_locking_sounds"
         android:order="-45"
         android:title="@string/screen_locking_sounds_title" />
+    <org.neoteric.support.preference.SwitchPreference
+        android:key="screenshot_shutter_sound"
+        android:title="@string/screenshot_shutter_sound_title"
+        android:order="-43"/>
 
-    <SwitchPreference
+    <org.neoteric.support.preference.SwitchPreference
         android:key="charging_sounds"
         android:order="-40"
         android:title="@string/charging_sounds_title" />
 
-    <SwitchPreference
+    <org.neoteric.support.preference.SwitchPreference
         android:key="docking_sounds"
-        android:order="-35"
-        android:title="@string/docking_sounds_title" />
+        android:title="@string/docking_sounds_title"
+        android:order="-35"/>
 
-    <SwitchPreference
+    <org.neoteric.support.preference.SwitchPreference
         android:key="touch_sounds"
         android:order="-30"
         android:title="@string/touch_sounds_title" />
 
-    <SwitchPreference
+    <org.neoteric.support.preference.SwitchPreference
         android:key="vibrate_icon"
         android:order="-27"
         android:title="@string/vibrate_icon_title" />
+
+    <!-- In-call feedback -->
+    <org.neoteric.support.preference.SystemSettingSwitchPreference
+        android:key="incall_feeedback_vibrate"
+        android:title="@string/incall_feeedback_vibrate_title"
+        android:defaultValue="false"
+        settings:controller="com.android.settings.sound.IncallFeedbackPreferenceController" />
 
     <DropDownPreference
         android:key="dock_audio_media"
@@ -190,7 +217,7 @@
         android:summary="%s"
         android:title="@string/dock_audio_media_title" />
 
-    <SwitchPreference
+    <org.neoteric.support.preference.SwitchPreference
         android:key="boot_sounds"
         android:order="-20"
         android:title="@string/boot_sounds_title" />
@@ -200,6 +227,24 @@
         android:order="-15"
         android:summary="%s"
         android:title="@string/emergency_tone_title" />
+    <org.neoteric.support.preference.SwitchPreference
+      android:key="call_connected_tones"
+      android:title="@string/call_connected_tones_title" />
+          
+    <org.neoteric.support.preference.GlobalSettingSwitchPreference
+        android:key="ringer_mute_speaker_media"
+        android:title="@string/ringer_mute_speaker_media_title"
+        android:summary="@string/ringer_mute_speaker_media_summary"
+        android:defaultValue="false"
+        android:order="-2"/>
+
+    <!-- Pulse Visualizer -->
+    <Preference
+        android:key="pulse"
+        android:title="@string/pulse_settings" 
+        android:summary="@string/pulse_settings_summary" 
+        android:fragment="com.android.settings.sound.PulseSettings" 
+        android:order="-1"/>
 
     <Preference
         android:fragment="com.android.settings.notification.SoundWorkSettings"

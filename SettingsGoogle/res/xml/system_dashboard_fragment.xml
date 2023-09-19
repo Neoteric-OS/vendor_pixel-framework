@@ -21,15 +21,6 @@
         android:title="@string/gesture_preference_title"
         settings:controller="com.android.settings.gestures.GesturesSettingPreferenceController" />
 
-    <!-- Button Settings -->
-    <Preference
-        android:key="button_settings"
-        android:title="@string/button_pref_title"
-        android:icon="@drawable/ic_button_settings"
-        android:order="-249"
-        android:fragment="com.android.settings.custom.buttons.ButtonSettings"
-        settings:controller="com.android.settings.custom.buttons.ButtonSettingsPreferenceController"/>
-
     <Preference
         android:fragment="com.android.settings.datetime.DateTimeSettings"
         android:icon="@drawable/ic_settings_date_time"
@@ -46,31 +37,15 @@
         settings:controller="com.google.android.settings.aware.AwareSettingsPreferenceController"
         settings:searchable="false" />
 
+
+    <!-- System updates -->
     <Preference
-        android:key="additional_system_update_settings"
-        android:order="-59"
-        android:title="@string/additional_system_update_settings_list_item_title"
-        settings:controller="com.android.settings.system.AdditionalSystemUpdatePreferenceController">
-
-        <intent
-            android:action="android.intent.action.MAIN"
-            android:targetClass="@string/additional_system_update_menu"
-            android:targetPackage="@string/additional_system_update" />
-
-    </Preference>
-
-    <Preference
+        android:key="system_update"
+        android:title="@string/system_update_title"
         android:icon="@drawable/ic_system_update"
-        android:key="system_update_settings"
-        android:order="-58"
-        android:summary="@string/summary_placeholder"
-        android:title="@string/system_update_settings_list_item_title"
-        settings:controller="com.android.settings.system.SystemUpdatePreferenceController"
-        settings:keywords="@string/keywords_system_update_settings">
-
-        <intent
-            android:action="android.settings.SYSTEM_UPDATE_SETTINGS" />
-
+        android:order="-235">
+        <intent android:targetPackage="org.neoteric.ota"
+                android:targetClass="org.neoteric.ota.UpdatesActivity" />
     </Preference>
 
     <Preference
