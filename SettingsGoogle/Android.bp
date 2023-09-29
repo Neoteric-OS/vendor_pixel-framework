@@ -39,6 +39,9 @@ android_app {
     overrides: [
         "Settings",
     ],
+    libs: [
+        "extphonelib"
+    ],
     manifest: ":Settings_manifest",
     additional_manifests: ["AndroidManifest.xml"],
 }
