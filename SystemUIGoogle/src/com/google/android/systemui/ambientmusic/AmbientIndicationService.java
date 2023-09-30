@@ -22,6 +22,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
+import android.media.session.MediaController;
+import android.media.session.MediaSessionManager;
+import android.media.session.PlaybackState;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.util.Log;
@@ -29,6 +33,8 @@ import android.util.Log;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
 import com.android.systemui.Dependency;
+
+import java.util.List;
 
 public class AmbientIndicationService extends BroadcastReceiver {
     private final AlarmManager mAlarmManager;
@@ -82,8 +88,10 @@ public class AmbientIndicationService extends BroadcastReceiver {
                 if (!newTitle.equals(lastTitle)) {
                     lastTitle = newTitle;
                     Log.i("AmbientIndication", "Sending ambient pulse event for: " + newTitle);
-                    mContext.sendBroadcastAsUser(new Intent("com.android.systemui.doze.pulse"),
-                        new UserHandle(UserHandle.USER_CURRENT));
+                    if (!isMediaPlaying()) {
+                        mContext.sendBroadcastAsUser(new Intent("com.android.systemui.doze.pulse"),
+                            new UserHandle(UserHandle.USER_CURRENT));
+                    }
                 }
                 Log.i("AmbientIndication", "Showing ambient indication.");
             }
@@ -97,6 +105,24 @@ public class AmbientIndicationService extends BroadcastReceiver {
             return false;
         }
         return true;
+    }
+
+    private boolean isMediaPlaying() {
+        AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        MediaSessionManager sessionManager = (MediaSessionManager) mContext.getSystemService(Context.MEDIA_SESSION_SERVICE);
+
+        if (sessionManager != null) {
+            List<MediaController> controllers = sessionManager.getActiveSessions(null);
+
+            for (MediaController controller : controllers) {
+                PlaybackState state = controller.getPlaybackState();
+                
+                if (state != null && state.getState() == PlaybackState.STATE_PLAYING) {
+                    return true;
+                }
+            }
+        }
+        return audioManager != null && audioManager.isMusicActive();
     }
 
     boolean isForCurrentUser() {
